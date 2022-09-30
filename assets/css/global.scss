@@ -1,0 +1,28 @@
+html {
+  font-family: PingFang SC, HarmonyOS_Regular, Helvetica Neue, Microsoft YaHei,
+    sans-serif !important;
+  scroll-behavior: smooth !important;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.icon-panel {
+  width: 60px;
+  padding-top: 5px;
+  text-align: center;
+  &:hover {
+    background-color: #999999;
+    .icon-size {
+      fill: #444242;
+      stroke: #444242;
+    }
+  }
+}
+
+.icon-size {
+  width: 30px;
+  fill: #a09a9a;
+  stroke: #a09a9a;
+}
