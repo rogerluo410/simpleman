@@ -1,15 +1,15 @@
 <template>
   <div class="home">
     <div class="trytopnav">
-      <div class="w3-bar" style="overflow: auto">
+      <div :class="['w3-bar', rotateHorizontal ? 'horizontal' : '']">
         <a-row type="flex" align="middle">
           <div class="icon-panel">
             <svg-icon name="save" class="icon-size" />
           </div>
-          <div class="icon-panel">
+          <div class="icon-panel" @click="rotate">
             <svg-icon name="rotate" class="icon-size" />
           </div>
-          <div class="icon-panel">
+          <div class="icon-panel" @click="changeTheme">
             <svg-icon name="adjust" class="icon-size" />
           </div>
         </a-row>
@@ -26,9 +26,12 @@
     </div>
 
     <div id="container">
-      <div id="textareacontainer">
+      <div
+        id="textareacontainer"
+        :class="[rotateHorizontal ? 'horizontal' : '']"
+      >
         <div id="textarea">
-          <div id="textareawrapper">
+          <div id="textareawrapper" :class="[darkTheme ? 'dark' : '']">
             <div class="request-panel">
               <div class="request-method">{{ request_method }}</div>
               <div class="request-url">
@@ -49,9 +52,9 @@
           </div>
         </div>
       </div>
-      <div id="iframecontainer">
+      <div id="iframecontainer" :class="[rotateHorizontal ? 'horizontal' : '']">
         <div id="iframe">
-          <div id="iframewrapper">
+          <div id="iframewrapper" :class="[darkTheme ? 'dark' : '']">
             <div class="request-panel">
               <div class="request-url">
                 <p>
@@ -87,6 +90,8 @@ export default {
   data() {
     return {
       loading: false,
+      rotateHorizontal: false,
+      darkTheme: false,
       jsonCode: "{}",
       jsonResultCode: "{}",
       readonly: false,
@@ -106,6 +111,14 @@ export default {
   methods: {
     enableTryit() {
       return true;
+    },
+    rotate() {
+      this.rotateHorizontal = !this.rotateHorizontal;
+    },
+    changeTheme() {
+      this.darkTheme = !this.darkTheme;
+      this.$refs.jsonEditor.setTheme(this.darkTheme ? "dark" : "light");
+      this.$refs.jsonResultEditor.setTheme(this.darkTheme ? "dark" : "light");
     },
     handleJsonChange(val) {
       if (this.jsonCode !== val) {
@@ -154,8 +167,15 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  // overflow: auto;
   width: 50%;
   height: 100%;
+  padding-right: 5px;
+}
+
+.w3-bar.horizontal {
+  width: 100%;
+  padding-right: 15px;
 }
 
 #container {
@@ -166,6 +186,7 @@ export default {
   top: 48px;
   bottom: 0;
   height: auto;
+  padding: 0 12px;
 }
 
 #textareacontainer,
@@ -173,10 +194,18 @@ export default {
   float: left;
   height: 100%;
   width: 50%;
+  padding: 0 5px;
+}
+
+#textareacontainer.horizontal,
+#iframecontainer.horizontal {
+  height: 50%;
+  float: none;
+  width: 100%;
 }
 
 #textarea {
-  padding-left: 10px;
+  // padding-left: 10px;
 }
 
 #textareawrapper {
@@ -186,6 +215,12 @@ export default {
   background-color: #ffffff;
   position: relative;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 12%), 0 1px 2px rgba(0, 0, 0, 24%);
+}
+
+#textareawrapper.dark,
+#iframewrapper.dark {
+  color: #fff;
+  background: #29455f;
 }
 
 .code-mirror-box {
@@ -218,8 +253,6 @@ textarea {
 }
 
 #iframe {
-  padding-left: 5px;
-  padding-right: 10px;
   position: relative;
 }
 
@@ -277,7 +310,7 @@ button[disabled] {
 .request-method {
   display: flex;
   align-items: center;
-  width: 55px;
+  width: 58px;
   height: 100%;
   padding: 0 6px;
   border-right: 1px #acacac solid;
