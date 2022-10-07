@@ -337,7 +337,9 @@ button[disabled] {
 
 .request-url {
   padding: 0 6px;
-  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 :deep() .ant-input {
