@@ -32,11 +32,19 @@
       >
         <div id="textarea">
           <div id="textareawrapper" :class="[darkTheme ? 'dark' : '']">
-            <div class="request-panel">
-              <div class="request-method">{{ request_method }}</div>
-              <div class="request-url">
-                <p>{{ request_url }}</p>
-              </div>
+            <div class="request-panel" :class="[darkTheme ? 'dark' : '']">
+              <a-input v-model="requestUrl">
+                <template #addonBefore>
+                  <a-select v-model="requestMethod" style="width: 90px">
+                    <a-select-option
+                      v-for="method of requestMethods"
+                      :key="method"
+                      :value="method"
+                      >{{ method }}</a-select-option
+                    >
+                  </a-select>
+                </template>
+              </a-input>
             </div>
             <!-- if Nust.js/SSR（如果在 Nuxt.js 环境下，需要外面包裹一层 no-ssr） -->
             <no-ssr placeholder="Codemirror Loading...">
@@ -57,12 +65,12 @@
           <div id="iframewrapper" :class="[darkTheme ? 'dark' : '']">
             <div class="request-panel">
               <div class="request-url">
-                <p>
+                <div>
                   结果:
                   <span v-show="response_status"
                     >状态码 {{ response_status }}</span
                   >
-                </p>
+                </div>
               </div>
             </div>
             <!-- if Nust.js/SSR（如果在 Nuxt.js 环境下，需要外面包裹一层 no-ssr） -->
@@ -99,6 +107,17 @@ export default {
       request_url: "",
       request_method: "",
       response_status: "",
+      requestMethod: "POST",
+      requestUrl: "",
+      requestMethods: [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS",
+        "HEAD",
+      ],
     };
   },
   mounted() {
@@ -299,7 +318,7 @@ button[disabled] {
 }
 
 .request-panel {
-  height: 30px;
+  height: 35px;
   border-bottom: 1px #acacac solid;
   display: flex;
   justify-content: flex-start;
@@ -318,5 +337,14 @@ button[disabled] {
 
 .request-url {
   padding: 0 6px;
+  height: 100%;
+}
+
+:deep() .ant-input {
+  border-radius: 0;
+}
+
+:deep() .ant-input-group-addon {
+  border-radius: 0;
 }
 </style>
